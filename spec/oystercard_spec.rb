@@ -25,5 +25,42 @@ describe Oystercard do
     end
   end
 
+  describe '.deduct' do
+    context 'when given an argument' do
+      it 'will accept the argument' do
+        expect(subject).to respond_to(:deduct).with(1).argument
+      end
+      it 'will reduce the balance by the fare' do
+        subject.top_up(50)
+        subject.deduct(5)
+        expect(subject.balance).to eq 45
+      end
+      it 'will reduce the balance by the fare' do
+        subject.top_up(10)
+        subject.deduct(15)
+        expect(subject.balance).to eq (-5)
+      end
+    end
+  end
+
+  describe '.touch_in' do
+    context 'when called' do
+      it 'will return true' do
+        subject.touch_in
+        expect(subject).to be_in_journey
+      end
+    end
+  end
+
+  describe '.touch_out' do
+    context 'when called' do
+      it 'will return false' do
+        subject.touch_in
+        subject.touch_out
+        expect(subject).not_to be_in_journey
+      end
+    end
+  end
+
 
 end
