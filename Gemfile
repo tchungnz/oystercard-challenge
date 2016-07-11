@@ -8,4 +8,6 @@ group :development, :test do
   gem "rspec"
 end
 
+gem 'emojify_rspec_formatter'
+
 # gem "rails"
