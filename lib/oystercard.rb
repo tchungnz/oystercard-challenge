@@ -6,6 +6,10 @@ class Oystercard
     @get_balance = 0
   end
 
+  def top_up(amount)
+    @get_balance += amount
+  end
+
 end
 
 #tim
