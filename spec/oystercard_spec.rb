@@ -31,4 +31,24 @@ describe Oystercard do
     end
   end
 
+  describe 'in_journey' do
+    it 'will check if card has been touched in but not yet touched out' do
+      expect( subject.in_journey ).to be false
+    end
+  end
+
+  describe 'touch_in' do
+    it 'will initiate a journey and change in_journey? to true' do
+      subject.touch_in
+      expect(subject.in_journey).to be true
+    end
+  end
+
+  describe 'touch_out' do
+    it 'will end jouney and change in_journey? to false' do
+      subject.touch_out
+      expect(subject.in_journey).to be false
+    end
+  end
+
 end
