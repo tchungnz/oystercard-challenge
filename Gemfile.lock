@@ -1,7 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    colorize (0.8.1)
     diff-lcs (1.2.5)
+    emojify_rspec_formatter (0.1.5)
+      colorize
+      rspec (~> 3.0)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -20,6 +24,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  emojify_rspec_formatter
   rspec
 
 RUBY VERSION
