@@ -2,6 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   let(:subject) { Oystercard.new }
+  let(:station) { double(:station) }
 
 
   describe '#balance' do
@@ -23,29 +24,27 @@ describe Oystercard do
     end
   end
 
-  describe'#deduct' do
+  describe '#touch_in(station)' do
     before do
-      subject.top_up 20
-    end
-    it 'deducts money from balance' do
-      expect{ subject.deduct(10) }.to change{ subject.balance }.by -10
-    end
-  end
-
-  describe '#touch_in' do
-    it "records a journey as in progress" do
       subject.top_up(1)
-      expect(subject.touch_in).to(eq(true))
+    end
+    it "records a journey as in progress" do
+      expect(subject.touch_in(station)).to(eq(true))
     end
     it 'raises error if balance is below a minimum amount' do
-      expect{subject.touch_in}.to(raise_error("Balance is below £#{described_class::MIN_BALANCE}"))
+      subject = described_class.new
+      expect{subject.touch_in(station)}.to(raise_error("Balance is below £#{described_class::MIN_BALANCE}"))
+    end
+    it 'records entry station' do
+      subject.touch_in(station)
+      expect(subject.entry_station).to(eq(station))
     end
   end
 
   describe '#touch_out' do
     before do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in(station)
     end
     it "ends an in progress journey" do
       expect(subject.touch_out).to(eq(false))
@@ -59,7 +58,7 @@ describe Oystercard do
   describe '#in_journey' do
     before do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in(station)
     end
     it "is true when a card has been touched in" do
       expect(subject).to(be_in_journey)
