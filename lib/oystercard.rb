@@ -6,7 +6,6 @@ FARE = 1
 
   def initialize
     @balance = 0
-    @in_journey = false
     @entry_station
   end
 
@@ -18,16 +17,15 @@ FARE = 1
   def touch_in(station)
     fail min_balance_error if below_min?
     assign_entry(station)
-    @in_journey = true
   end
 
   def touch_out
     deduct(FARE)
-    @in_journey = false
+    @entry_station = nil
   end
 
   def in_journey?
-    @in_journey
+    !!entry_station
   end
 
   private

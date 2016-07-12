@@ -29,7 +29,7 @@ describe Oystercard do
       subject.top_up(1)
     end
     it "records a journey as in progress" do
-      expect(subject.touch_in(station)).to(eq(true))
+      expect(subject.touch_in(station)).to eq station
     end
     it 'raises error if balance is below a minimum amount' do
       subject = described_class.new
@@ -47,7 +47,7 @@ describe Oystercard do
       subject.touch_in(station)
     end
     it "ends an in progress journey" do
-      expect(subject.touch_out).to(eq(false))
+      expect(subject.touch_out).to(eq(nil))
     end
     it "deducts the fare from the balance" do
       fare = -(described_class::FARE)
