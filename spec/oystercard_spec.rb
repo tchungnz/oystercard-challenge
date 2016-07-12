@@ -43,8 +43,16 @@ describe Oystercard do
   end
 
   describe '#touch_out' do
+    before do
+      subject.top_up(10)
+      subject.touch_in
+    end
     it "ends an in progress journey" do
       expect(subject.touch_out).to(eq(false))
+    end
+    it "deducts the fare from the balance" do
+      fare = -(described_class::FARE)
+      expect{subject.touch_out}.to(change{subject.balance}.by(fare))
     end
   end
 
