@@ -20,13 +20,6 @@ describe Oystercard do
 
   end
 
-  describe '#deduct' do
-    it {is_expected.to respond_to(:deduct).with(1).argument}
-    it 'will deduct the balance by the value' do
-      expect{ subject.deduct 1}.to change{subject.get_balance}.by -1
-    end
-  end
-
   describe 'in_journey' do
     it 'will check if card has been touched in but not yet touched out' do
       expect( subject.in_journey ).to be false
@@ -49,6 +42,9 @@ describe Oystercard do
     it 'will end jouney and change in_journey? to false' do
       subject.touch_out
       expect(subject.in_journey).to be false
+    end
+    it 'will deduct the MINIMUM_FARE from the card' do
+      expect{ subject.touch_out }.to change{ subject.get_balance }.by -Oystercard::MINIMUM_FARE
     end
   end
 
