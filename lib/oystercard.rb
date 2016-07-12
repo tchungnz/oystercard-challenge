@@ -19,4 +19,8 @@ CREDIT_LIMIT = 90
     "Balance cannot exceed #{CREDIT_LIMIT}."
   end
 
+  def deduct(amount)
+    @balance -= amount
+  end
+
 end

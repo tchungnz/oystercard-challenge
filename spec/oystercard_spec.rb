@@ -18,8 +18,7 @@ describe Oystercard do
     it { is_expected.to respond_to(:top_up).with(1).argument }
 
     it 'tops up card balance' do
-      subject.top_up(10.00)
-      expect(subject.balance).to eq 10.00
+      expect{ subject.top_up(10.00) }.to  change{ subject.balance }.by 10.00
     end
 
     it 'cannot exceed the credit limit' do
@@ -29,4 +28,15 @@ describe Oystercard do
     end
   end
 
+  describe'#deduct' do
+
+    before do
+      subject.top_up 20.00
+    end
+
+    it 'deducts money from balance' do
+      expect{ subject.deduct(10.00) }.to change{ subject.balance }.by -10.00
+    end
+
+  end
 end
