@@ -13,6 +13,10 @@ class Oystercard
     raise "maximum balance is #{MAXIMUM_CAPACITY}" if @get_balance > MAXIMUM_CAPACITY
   end
 
+  def deduct(value)
+    @get_balance -= value
+  end
+
 end
 
 #tim
