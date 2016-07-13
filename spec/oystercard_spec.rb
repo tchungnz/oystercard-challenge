@@ -46,15 +46,24 @@ end
 
     it "throws an error when insufficient balance" do
       expect{subject.touch_in(station0)}.to raise_error "Insufficient balance. Minimum £#{Oystercard::MINIMUM_FARE}"
-      expect(subject).not_to be_in_journey
     end
 
     it "remembers entry station" do
       subject.top_up(10)
       subject.touch_in(station0)
-      expect(subject.entry_station).to eq station0
+      expect(subject.journey.start).to eq station0
     end
+
+    context 'when in_journey' do
+      it "charges penalty on touch in" do
+        subject.top_up(10)
+        subject.touch_in(station0)
+        expect {subject.touch_in(station1)}.to change{subject.balance}.by(-6)
+      end
+    end
+
   end
+
 
   describe '#touch_out' do
     it "sets in_journey to false" do
@@ -70,10 +79,11 @@ end
       expect {subject.touch_out(station0)}.to change{subject.balance}.by(-(Oystercard::MINIMUM_FARE))
     end
 
-    it "forgets the entry station on touch out" do
-      subject.top_up(10)
-      subject.touch_in(station0)
-      expect {subject.touch_out(station0)}.to change{subject.entry_station}.to(nil)
+    context 'when no touch in' do
+      it "charges penalty on touch out" do
+        subject.top_up(10)
+        expect {subject.touch_out(station0)}.to change{subject.balance}.by(-6)
+      end
     end
 
     it 'sets entry and exit to nil' do
@@ -101,7 +111,6 @@ end
       card.touch_in(station0)
       card.touch_out(station1)
       expect(subject.journeys[0]).to eq subject.journey
-      p subject.journeys[0]
     end
   end
 

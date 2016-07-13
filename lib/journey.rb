@@ -15,4 +15,13 @@ class Journey
     @stop = exit_station
   end
 
+  def in_journey?
+    !!@start && !@stop
+  end
+
+  def fare
+    return 1 if !!@start && !!@stop
+    return 6
+  end
+
 end
