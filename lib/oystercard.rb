@@ -16,6 +16,7 @@ FARE = 1
   end
 
   def touch_in(station)
+    #fail station_error unless station.is_a? Station
     fail min_balance_error if below_min?
     assign_entry(station)
   end
@@ -31,6 +32,10 @@ FARE = 1
   end
 
   private
+
+  def station_error
+    'Not a station'
+  end
 
   def deduct(amount)
     @balance -= amount

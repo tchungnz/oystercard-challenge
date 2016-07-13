@@ -3,8 +3,7 @@ require 'oystercard'
 describe Oystercard do
   let(:subject) { described_class.new}
   let(:entry_station) { double(:station) }
-  let(:exit_station) { double(:station)}
-
+  let(:exit_station) { double(:station) }
 
   describe '#balance' do
     it { is_expected.to respond_to(:balance) }
@@ -28,6 +27,7 @@ describe Oystercard do
   describe '#touch_in(station)' do
     before do
       subject.top_up(1)
+      allow(entry_station).to receive(:is_a?).with(Station) {true}
     end
     it "records a journey as in progress" do
       expect(subject.touch_in(entry_station)).to eq entry_station
@@ -36,6 +36,9 @@ describe Oystercard do
       subject = described_class.new
       expect{subject.touch_in(entry_station)}.to(raise_error("Balance is below £#{described_class::MIN_BALANCE}"))
     end
+    #it 'only accepts station class objects' do
+    #  expect{subject.touch_in(String.new)}.to raise_error 'Not a station'
+    #end
   end
 
   describe '#touch_out' do
