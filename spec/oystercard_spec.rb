@@ -1,8 +1,9 @@
 require 'oystercard'
 
 describe Oystercard do
-  let(:subject) { Oystercard.new }
-  let(:station) { double :station }
+  subject(:card) { Oystercard.new }
+  let(:station0) { double :station }
+  let(:station1) { double :station }
 
 describe 'initialize' do
   it "has an empty journey array" do
@@ -39,56 +40,74 @@ end
   describe '#touch_in' do
     it "sets in_journey to true" do
       subject.top_up(10)
-      subject.touch_in(station)
+      subject.touch_in(station0)
       expect(subject).to be_in_journey
     end
 
     it "throws an error when insufficient balance" do
-      expect{subject.touch_in(station)}.to raise_error "Insufficient balance. Minimum £#{Oystercard::MINIMUM_FARE}"
+      expect{subject.touch_in(station0)}.to raise_error "Insufficient balance. Minimum £#{Oystercard::MINIMUM_FARE}"
       expect(subject).not_to be_in_journey
     end
 
     it "remembers entry station" do
       subject.top_up(10)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      subject.touch_in(station0)
+      expect(subject.entry_station).to eq station0
     end
   end
 
   describe '#touch_out' do
     it "sets in_journey to false" do
-      subject.touch_out(station)
+      subject.touch_out(station0)
       expect(subject).not_to be_in_journey
     end
 
     it "charges fare on touch out" do
       subject.top_up(10)
-      subject.touch_in(station)
-      expect {subject.touch_out(station)}.to change{subject.balance}.by(-(Oystercard::MINIMUM_FARE))
+      subject.touch_in(station0)
+      expect {subject.touch_out(station0)}.to change{subject.balance}.by(-(Oystercard::MINIMUM_FARE))
     end
 
     it "remembers exit station" do
       subject.top_up(10)
-      subject.touch_in(station)
-      subject.touch_out(station)
-      expect(subject.exit_station).to eq station
+      subject.touch_in(station0)
+      subject.touch_out(station0)
+      expect((subject.journeys[0])[station0]).to eq station0
     end
 
     it "forgets the entry station on touch out" do
       subject.top_up(10)
-      subject.touch_in(station)
-      expect {subject.touch_out(station)}.to change{subject.entry_station}.to(nil)
+      subject.touch_in(station0)
+      expect {subject.touch_out(station0)}.to change{subject.entry_station}.to(nil)
+    end
+
+    it 'sets entry and exit to nil' do
+      card.top_up(10)
+      card.touch_in(station0)
+      card.touch_out(station1)
+      expect(card.entry_station).to eq nil
+      expect(card.exit_station).to eq nil
     end
   end
 
   describe '#in_journey?' do
     it "returns in journey status" do
       subject.top_up(10)
-      subject.touch_in(station)
+      subject.touch_in(station0)
       expect(subject.in_journey?).to eq true
-      subject.touch_out(station)
+      subject.touch_out(station0)
       expect(subject.in_journey?).to eq false
     end
   end
+
+  describe '#store_journey' do
+    it 'stores journey in hash in journeys' do
+      card.top_up(10)
+      card.touch_in(station0)
+      card.touch_out(station1)
+      expect(card.journeys).to eq [{ station0 => station1 }]
+    end
+  end
+
 
 end
