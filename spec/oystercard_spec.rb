@@ -1,9 +1,10 @@
 require 'oystercard'
+require 'station'
 
 describe Oystercard do
   let(:subject) { described_class.new}
-  let(:entry_station) { double(:station) }
-  let(:exit_station) { double(:station) }
+  let(:entry_station) { double(:station, is_a?: Station) }
+  let(:exit_station) { double(:station, is_a?: Station) }
 
   describe '#balance' do
     it { is_expected.to respond_to(:balance) }
@@ -27,7 +28,6 @@ describe Oystercard do
   describe '#touch_in(station)' do
     before do
       subject.top_up(1)
-      allow(entry_station).to receive(:is_a?).with(Station) {true}
     end
     it "records a journey as in progress" do
       expect(subject.touch_in(entry_station)).to eq entry_station
@@ -36,9 +36,9 @@ describe Oystercard do
       subject = described_class.new
       expect{subject.touch_in(entry_station)}.to(raise_error("Balance is below £#{described_class::MIN_BALANCE}"))
     end
-    #it 'only accepts station class objects' do
-    #  expect{subject.touch_in(String.new)}.to raise_error 'Not a station'
-    #end
+    it 'only accepts station class objects' do
+      expect{subject.touch_in(String.new)}.to raise_error 'Not a station'
+    end
   end
 
   describe '#touch_out' do
@@ -52,6 +52,9 @@ describe Oystercard do
     it "deducts the fare from the balance" do
       fare = -(described_class::FARE)
       expect{subject.touch_out(exit_station)}.to(change{subject.balance}.by(fare))
+    end
+    it 'only accepts station class objects' do
+      expect{subject.touch_out(String.new)}.to raise_error 'Not a station'
     end
   end
 
@@ -83,8 +86,8 @@ describe Oystercard do
       expect(subject.log).to eq ([{ entry: entry_station, exit: exit_station }])
     end
     it 'returns an array of hashes of journeys' do
-      entry_station_2 = double(:station)
-      exit_station_2 = double(:station)
+      entry_station_2 = double(:station, is_a?: Station)
+      exit_station_2 = double(:station, is_a?: Station)
       subject.touch_in(entry_station_2)
       subject.touch_out(exit_station_2)
       expect(subject.log).to eq ([{ entry: entry_station, exit: exit_station },

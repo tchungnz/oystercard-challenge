@@ -16,12 +16,13 @@ FARE = 1
   end
 
   def touch_in(station)
-    #fail station_error unless station.is_a? Station
+    fail station_error unless station.is_a? Station
     fail min_balance_error if below_min?
     assign_entry(station)
   end
 
   def touch_out(station)
+    fail station_error unless station.is_a? Station
     deduct(FARE)
     assign_exit(station)
     log_journey
