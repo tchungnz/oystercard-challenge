@@ -10,6 +10,9 @@ let(:subject) {Station.new('station_name',1)}
     it 'allows name assignment when created' do
       expect(subject.name).to eq 'station_name'
     end
+    it 'creates attributes name and zone' do
+      expect(subject).to have_attributes(:name => 'station_name', :zone => 1)
+    end
   end
 
 end

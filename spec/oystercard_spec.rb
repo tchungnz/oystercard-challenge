@@ -92,7 +92,6 @@ describe Oystercard do
       subject.touch_out(exit_station_2)
       expect(subject.log).to eq ([{ entry: entry_station, exit: exit_station },
                                    {entry: entry_station_2, exit: exit_station_2}])
-
     end
     it 'has an empty log of journeys by default' do
       subject = Oystercard.new
