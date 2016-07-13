@@ -4,53 +4,57 @@ class Travel
 MIN_FARE = 1
 MAX_FARE = 6
 
-attr_reader :log, :journey
+attr_reader :log, :journey, :fare
 
   def initialize
     @journey = {}
     @log = []
-    @complete = true
+    @journey_complete = true
     @penalty = false
+    @fare = MIN_FARE
   end
 
-  def assign_entry(station)
+  def journey_entry(station)
     start_journey
     @journey[:entry] = station
   end
 
-  def assign_exit(station)
-    finish_journey
+  def journey_exit(station)
     @journey[:exit] = station
-    log_journey
+    finish_journey
+  end
+
+  def journey_complete?
+    @journey_complete
   end
 
   def fare
-    if @penality == true
-       @penality = false
-      MAX_FARE
+    if @penalty == false
+      @fare = MIN_FARE
     else
-      MIN_FARE
+      @fare = MAX_FARE
     end
   end
 
 private
 
   def start_journey
-    if @complete == true
-       @complete = false
+    if @journey_complete == true
+       @journey_complete = false
     else
       @penalty = true
       log_journey
     end
   end
 
-
   def finish_journey
-    if @complete == false
-       @complete = true
-    else
-      @penalty = true
-      @journey = {}
+    if @journey_complete == false
+       @journey_complete = true
+       @penalty = false
+       log_journey
+     else
+       @penalty = true
+       log_journey
     end
   end
 
@@ -58,4 +62,5 @@ private
     @log << @journey
     @journey = {}
   end
+
 end

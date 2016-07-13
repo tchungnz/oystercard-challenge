@@ -29,9 +29,6 @@ describe Oystercard do
     before do
       subject.top_up(1)
     end
-    it "records a journey as in progress" do
-      expect(subject.touch_in(entry_station)).to eq entry_station
-    end
     it 'raises error if balance is below a minimum amount' do
       subject = described_class.new
       expect{subject.touch_in(entry_station)}.to(raise_error("Balance is below £#{described_class::MIN_BALANCE}"))
@@ -46,29 +43,12 @@ describe Oystercard do
       subject.top_up(10)
       subject.touch_in(entry_station)
     end
-    it "ends an in progress journey" do
-      expect(subject.touch_out(exit_station)).to(eq({}))
-    end
     it "deducts the fare from the balance" do
-      fare = -(described_class::FARE)
-      expect{subject.touch_out(exit_station)}.to(change{subject.balance}.by(fare))
+      expect{subject.touch_out(exit_station)}.to change{subject.balance}.by -Travel::MIN_FARE
     end
     it 'only accepts station class objects' do
       expect{subject.touch_out(String.new)}.to raise_error 'Not a station'
     end
   end
 
-  describe '#in_journey?' do
-    before do
-      subject.top_up(10)
-      subject.touch_in(entry_station)
-    end
-    it "is true when a card has been touched in" do
-      expect(subject).to(be_in_journey)
-    end
-    it "is false when a card has been touched out" do
-      subject.touch_out(exit_station)
-      expect(subject).not_to(be_in_journey)
-    end
-  end
 end
