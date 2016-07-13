@@ -58,6 +58,8 @@ end
 
   describe '#touch_out' do
     it "sets in_journey to false" do
+      subject.top_up(10)
+      subject.touch_in(station0)
       subject.touch_out(station0)
       expect(subject).not_to be_in_journey
     end
@@ -66,13 +68,6 @@ end
       subject.top_up(10)
       subject.touch_in(station0)
       expect {subject.touch_out(station0)}.to change{subject.balance}.by(-(Oystercard::MINIMUM_FARE))
-    end
-
-    it "remembers exit station" do
-      subject.top_up(10)
-      subject.touch_in(station0)
-      subject.touch_out(station0)
-      expect((subject.journeys[0])[station0]).to eq station0
     end
 
     it "forgets the entry station on touch out" do
@@ -101,11 +96,12 @@ end
   end
 
   describe '#store_journey' do
-    it 'stores journey in hash in journeys' do
+    it 'stores journey as objects in journeys' do
       card.top_up(10)
       card.touch_in(station0)
       card.touch_out(station1)
-      expect(card.journeys).to eq [{ station0 => station1 }]
+      expect(subject.journeys[0]).to eq subject.journey
+      p subject.journeys[0]
     end
   end
 
