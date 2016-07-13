@@ -87,3 +87,6 @@ puts 'card taps out'
 puts oystercard.touch_out(station1)
 
 puts oystercard.balance #charged fare
+
+puts 'journey log'
+puts oystercard.journey_log
