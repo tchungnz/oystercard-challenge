@@ -8,7 +8,7 @@ let(:subject) {Station.new('station_name',1)}
       expect(subject.zone).to eq 1
     end
     it 'allows name assignment when created' do
-      expect(subject.station_name).to eq 'station_name'
+      expect(subject.name).to eq 'station_name'
     end
   end
 
