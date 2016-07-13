@@ -1,13 +1,15 @@
+require_relative 'travel'
+require_relative 'station'
+
 class Oystercard
 MAX_BALANCE = 90
 MIN_BALANCE = 1
 FARE = 1
-  attr_reader :balance, :log
+  attr_reader :balance
 
   def initialize
     @balance = 0
-    @journey = {}
-    @log = []
+    @journey_info = Travel.new
   end
 
   def top_up(amount)
@@ -18,18 +20,21 @@ FARE = 1
   def touch_in(station)
     fail station_error unless station.is_a? Station
     fail min_balance_error if below_min?
-    assign_entry(station)
+    @journey_info.assign_entry(station)
   end
 
   def touch_out(station)
     fail station_error unless station.is_a? Station
-    deduct(FARE)
-    assign_exit(station)
-    log_journey
+    deduct(@journey_info.fare)
+    @journey_info.assign_exit(station)
   end
 
   def in_journey?
-    @journey.has_key?(:entry)
+    @journey_info::journey.has_key?(:entry)
+  end
+
+  def history
+    @journey_info.log
   end
 
   private
@@ -38,7 +43,7 @@ FARE = 1
     'Not a station'
   end
 
-  def deduct(amount)
+  def deduct(fare)
     @balance -= amount
   end
 
@@ -56,18 +61,5 @@ FARE = 1
 
   def top_up_error
     "Balance cannot exceed #{MAX_BALANCE}."
-  end
-
-  def assign_entry(station)
-    @journey[:entry] = station
-  end
-
-  def assign_exit(station)
-    @journey[:exit] = station
-  end
-
-  def log_journey
-    @log << @journey
-    @journey = {}
   end
 end

@@ -70,34 +70,5 @@ describe Oystercard do
       subject.touch_out(exit_station)
       expect(subject).not_to(be_in_journey)
     end
-    it 'starts with no journey in progress' do
-      subject = Oystercard.new
-      expect(subject).not_to(be_in_journey)
-    end
   end
-
-  describe '#log' do
-    before do
-      subject.top_up(20)
-      subject.touch_in(entry_station)
-      subject.touch_out(exit_station)
-    end
-    it 'returns an array of hashes of entry/exit stations' do
-      expect(subject.log).to eq ([{ entry: entry_station, exit: exit_station }])
-    end
-    it 'returns an array of hashes of journeys' do
-      entry_station_2 = double(:station, is_a?: Station)
-      exit_station_2 = double(:station, is_a?: Station)
-      subject.touch_in(entry_station_2)
-      subject.touch_out(exit_station_2)
-      expect(subject.log).to eq ([{ entry: entry_station, exit: exit_station },
-                                   {entry: entry_station_2, exit: exit_station_2}])
-    end
-    it 'has an empty log of journeys by default' do
-      subject = Oystercard.new
-      expect(subject.log).to be_empty
-    end
-  end
-
-
 end
