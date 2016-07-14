@@ -110,7 +110,7 @@ end
       card.top_up(10)
       card.touch_in(station0)
       card.touch_out(station1)
-      expect(subject.journeys[0]).to be_instance_of Journey
+      expect(subject.journeys[0]).to include({start: station0, stop: station1})
     end
   end
 
