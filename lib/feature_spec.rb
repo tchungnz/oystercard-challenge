@@ -80,13 +80,13 @@ puts oystercard.touch_in(station1)
 
 puts 'card taps in'
 puts oystercard.touch_in(station2)
-
-puts oystercard.balance #charged fine
-
+#
+#puts oystercard.balance #charged fine
+#
 puts 'card taps out'
 puts oystercard.touch_out(station1)
-
-puts oystercard.balance #charged fare
+#
+#puts oystercard.balance #charged fare
 
 puts 'journey log'
-puts oystercard.journey_log
+p oystercard.journeys

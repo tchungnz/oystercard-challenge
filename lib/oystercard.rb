@@ -33,8 +33,8 @@ class Oystercard
 
   def touch_out(exit_station)
     @journey.end(exit_station)
-    deduct
     store_journey
+    deduct
   end
 
   def in_journey?
@@ -42,7 +42,7 @@ class Oystercard
   end
 
   def store_journey
-    @journeys << @journey
+    @journeys << @journey.journey
     clear_journey
   end
 
