@@ -46,7 +46,7 @@ require_relative 'journey'
 ########################################
 
 puts 'create a new card'
-p oystercard = Oystercard.new
+puts oystercard = Oystercard.new
 
 puts 'create a new station'
 puts station1 = Station.new("Waterloo", 1)
@@ -89,4 +89,6 @@ puts oystercard.touch_out(station1)
 #puts oystercard.balance #charged fare
 
 puts 'journey log'
-p oystercard.journeys
+p oystercard.journey_log
+
+puts oystercard.balance
